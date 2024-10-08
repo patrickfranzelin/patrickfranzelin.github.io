@@ -1,131 +1,82 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins');
-
+/* Grundlegende Einstellungen */
 body {
-    font-family: 'Poppins', sans-serif;
-    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F5F5F5;
+    color: #333333;
     margin: 0;
-    max-width: 100vw;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-    background-color: #121212;
-    color: #fff;
+    padding: 0;
 }
 
-#loading {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    background: #121212;
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-#spinner {
-    animation: rotate 0.56s infinite linear;
-    width: 50px;
-    height: 50px;
-    border: 12px solid #1DB954;
-    border-bottom: 12px solid #fff;
-    border-radius: 50%;
-}
-
-@keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-header {
-    width: 92vw;
-    padding: 6vh 4vw;
-    position: fixed;
-    font-weight: bold;
-    background: transparent;
-    color: #fff;
-    transition: 0.4s ease-in-out;
-    z-index: 2;
-}
-
-header table {
-    width: 100%;
-}
-
-#logo {
-    font-size: 24px;
-    color: #1DB954;
-    width: 20%;
-}
-
-#navigation {
-    width: 80%;
-    text-align: right;
-}
-
-#navigation a {
-    color: inherit;
+a {
+    color: #4A90E2;
     text-decoration: none;
-    padding: 5px 10px;
-    border-bottom: 2px solid transparent;
-    margin-left: 4vw;
-    transition: 0.4s ease-in-out;
 }
 
-#navigation a:hover {
-    border-bottom: 2px solid #1DB954;
+a:hover {
+    text-decoration: underline;
 }
 
-#map {
-    height: 70vh;
-    width: 90%;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-}
-
-button {
-    font-size: 18px;
-    font-family: 'Poppins', sans-serif;
-    color: #1DB954;
-    background: #fff;
-    border: 3px solid #1DB954;
-    padding: 8px 40px;
-    border-radius: 80px;
-    font-weight: bold;
-    margin: 2vh 0px;
-    transition: 0.4s ease-in-out;
-}
-
-button:hover {
-    box-shadow: 0px 10px 30px rgba(29, 185, 84, 0.8);
-    cursor: pointer;
-    color: #fff;
-    background: #1DB954;
-}
-
-#controls {
+/* Header */
+header {
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     display: flex;
-    gap: 10px;
-    margin: 10px;
-    background-color: #333333;
-    padding: 15px;
-    border-radius: 8px;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
-select, input[type="file"] {
-    background-color: #555555;
-    color: #ffffff;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-}
-
-footer {
-    width: 100%;
-    padding: 20px 0;
-    text-align: center;
+header .logo {
+    font-size: 24px;
     font-weight: bold;
-    color: #1DB954;
-    background: #121212;
+    color: #4A90E2;
+}
+
+header .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+header .nav-links a {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Hauptinhalt (Kartenbereich) */
+#map {
+    width: 90%;
+    height: 70vh;
+    margin: 40px auto;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons und Steuerelemente */
+button, select, input[type="file"] {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 8px;
+    color: #FFFFFF;
+    background-color: #4A90E2;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover, select:hover, input[type="file"]:hover {
+    background-color: #357ABD;
+}
+
+/* Footer */
+footer {
+    background-color: #FAFAFA;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+    border-top: 1px solid #E0E0E0;
 }
