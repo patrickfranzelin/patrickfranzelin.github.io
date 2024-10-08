@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RiskySlopes</title>
+    <title>RiskySlopes Map</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 
@@ -18,28 +19,40 @@
 </header>
 
 <main>
-    <div id="map"></div>
     <div id="controls">
+        <label for="avalanche-level">Lawinenstufe:</label>
         <select id="avalanche-level">
-            <option value="1">Lawinenstufe 1 - Gering</option>
-            <option value="2">Lawinenstufe 2 - Mäßig</option>
-            <option value="3">Lawinenstufe 3 - Erheblich</option>
+            <option value="1">1 - Gering</option>
+            <option value="2">2 - Mäßig</option>
+            <option value="3">3 - Erheblich</option>
+            <option value="4">4 - Groß</option>
+            <option value="5">5 - Sehr Groß</option>
         </select>
+        <label for="wind-direction">Windrichtung:</label>
         <select id="wind-direction">
-            <option value="N">Windrichtung N</option>
-            <option value="E">Windrichtung E</option>
-            <option value="S">Windrichtung S</option>
+            <option value="N">N</option>
+            <option value="NE">NE</option>
+            <option value="E">E</option>
+            <option value="SE">SE</option>
+            <option value="S">S</option>
+            <option value="SW">SW</option>
+            <option value="W">W</option>
+            <option value="NW">NW</option>
         </select>
         <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
-        <input type="file" id="file-input" accept=".gpx, .geojson">
-        <button onclick="toggleDrawMode()">Route einzeichnen</button>
     </div>
+    
+    <div id="map" style="height: 70vh; width: 90%; margin: 40px auto; border-radius: 8px;"></div>
+
+    <input type="file" id="file-input" accept=".gpx, .geojson">
+    <button onclick="toggleDrawMode()">Route einzeichnen</button>
 </main>
 
 <footer>
     Made with ❤️ by RiskySlopes
 </footer>
 
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
