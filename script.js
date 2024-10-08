@@ -2,9 +2,10 @@
 const map = L.map('map').setView([46.6, 11.7], 10);
 
 // Testen Sie zuerst mit OpenStreetMap-Tiles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
 }).addTo(map);
+
 
 // Alternative Tile-URL als Backup, falls OpenStreetMap nicht funktioniert
 const alternativeTileLayer = 'https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=YOUR_API_KEY';
