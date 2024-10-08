@@ -1,45 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avalanche Risk Map</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avalanche Risk Map - South Tyrol</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Avalanche Risk Map - South Tyrol</h1>
-  
-  <div id="controls">
+<div id="loading">
+    <div id="spinner"></div>
+</div>
+
+<header>
+    <table>
+        <tr>
+            <td id="logo">RiskySlopes</td>
+            <td id="navigation">
+                <a href="#work">Map</a>
+                <a href="#bio">About</a>
+                <a href="#contact">Contact</a>
+            </td>
+        </tr>
+    </table>
+</header>
+
+<div id="controls">
     <label for="avalanche-level">Lawinenstufe:</label>
     <select id="avalanche-level">
-      <option value="1">1 - Gering</option>
-      <option value="2">2 - Mäßig</option>
-      <option value="3">3 - Erheblich</option>
-      <option value="4">4 - Groß</option>
-      <option value="5">5 - Sehr Groß</option>
+        <option value="1">1 - Gering</option>
+        <option value="2">2 - Mäßig</option>
+        <option value="3">3 - Erheblich</option>
+        <option value="4">4 - Groß</option>
+        <option value="5">5 - Sehr Groß</option>
     </select>
+
     <label for="wind-direction">Windrichtung:</label>
     <select id="wind-direction">
-      <option value="N">N</option>
-      <option value="NE">NE</option>
-      <option value="E">E</option>
-      <option value="SE">SE</option>
-      <option value="S">S</option>
-      <option value="SW">SW</option>
-      <option value="W">W</option>
-      <option value="NW">NW</option>
+        <option value="N">N</option>
+        <option value="NE">NE</option>
+        <option value="E">E</option>
+        <option value="SE">SE</option>
+        <option value="S">S</option>
+        <option value="SW">SW</option>
+        <option value="W">W</option>
+        <option value="NW">NW</option>
     </select>
+
     <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
-  </div>
-  
-  <div id="map"></div>
-  <input type="file" id="file-input" accept=".gpx, .geojson" />
-  <button onclick="toggleDrawMode()">Route einzeichnen</button>
-  
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/mapbox-gl/dist/mapbox-gl.js"></script>
-  <script src="script.js"></script>
+</div>
+
+<div id="map"></div>
+
+<input type="file" id="file-input" accept=".gpx, .geojson">
+<button onclick="toggleDrawMode()">Route einzeichnen</button>
+
+<footer>
+    Made on earth by a human | <a href="https://yourgithub.io">RiskySlopes</a>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
