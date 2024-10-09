@@ -62,7 +62,7 @@
 
         // DGM als 3D-Terrain hinzufügen
         const terrainTileset = new Cesium.Cesium3DTileset({
-            url: Cesium.IonResource.fromAssetId(YOUR_DGM_ASSET_ID) 
+            url: Cesium.IonResource.fromAssetId(2764800) 
         });
         viewer.scene.primitives.add(terrainTileset);
 
