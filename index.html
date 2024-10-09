@@ -21,63 +21,65 @@
     </nav>
 </header>
 
-<div id="sidebar">
-    <h2>Touren Info</h2>
-    <div class="info-section">
-        <label>Datum:</label>
-        <input type="date" id="tour-date">
+<div id="content">
+    <div id="sidebar">
+        <h2>Touren Info</h2>
+        <div class="info-section">
+            <label>Datum:</label>
+            <input type="date" id="tour-date">
+        </div>
+        <div class="info-section">
+            <label>Startzeit:</label>
+            <input type="time" id="tour-start-time">
+        </div>
+        <div class="info-section">
+            <label>Dauer:</label>
+            <p>02:34 h</p>
+        </div>
+        <div class="info-section">
+            <label>Distanz:</label>
+            <p>3.30 km</p>
+        </div>
+        <div class="info-section">
+            <label>Höhenmeter:</label>
+            <p>776 m</p>
+        </div>
+        <div class="info-section">
+            <label>Art:</label>
+            <p>Ski</p>
+        </div>
     </div>
-    <div class="info-section">
-        <label>Startzeit:</label>
-        <input type="time" id="tour-start-time">
-    </div>
-    <div class="info-section">
-        <label>Dauer:</label>
-        <p>02:34 h</p>
-    </div>
-    <div class="info-section">
-        <label>Distanz:</label>
-        <p>3.30 km</p>
-    </div>
-    <div class="info-section">
-        <label>Höhenmeter:</label>
-        <p>776 m</p>
-    </div>
-    <div class="info-section">
-        <label>Art:</label>
-        <p>Ski</p>
-    </div>
+
+    <main>
+        <div id="controls">
+            <label for="avalanche-level">Lawinenstufe:</label>
+            <select id="avalanche-level">
+                <option value="1">1 - Gering</option>
+                <option value="2">2 - Mäßig</option>
+                <option value="3">3 - Erheblich</option>
+                <option value="4">4 - Groß</option>
+                <option value="5">5 - Sehr Groß</option>
+            </select>
+            <label for="wind-direction">Windrichtung:</label>
+            <select id="wind-direction">
+                <option value="N">N</option>
+                <option value="NE">NE</option>
+                <option value="E">E</option>
+                <option value="SE">SE</option>
+                <option value="S">S</option>
+                <option value="SW">SW</option>
+                <option value="W">W</option>
+                <option value="NW">NW</option>
+            </select>
+            <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
+        </div>
+        
+        <div id="map"></div>
+
+        <input type="file" id="file-input" accept=".gpx, .geojson">
+        <button onclick="toggleDrawMode()">Route einzeichnen</button>
+    </main>
 </div>
-
-<main>
-    <div id="controls">
-        <label for="avalanche-level">Lawinenstufe:</label>
-        <select id="avalanche-level">
-            <option value="1">1 - Gering</option>
-            <option value="2">2 - Mäßig</option>
-            <option value="3">3 - Erheblich</option>
-            <option value="4">4 - Groß</option>
-            <option value="5">5 - Sehr Groß</option>
-        </select>
-        <label for="wind-direction">Windrichtung:</label>
-        <select id="wind-direction">
-            <option value="N">N</option>
-            <option value="NE">NE</option>
-            <option value="E">E</option>
-            <option value="SE">SE</option>
-            <option value="S">S</option>
-            <option value="SW">SW</option>
-            <option value="W">W</option>
-            <option value="NW">NW</option>
-        </select>
-        <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
-    </div>
-    
-    <div id="map"></div>
-
-    <input type="file" id="file-input" accept=".gpx, .geojson">
-    <button onclick="toggleDrawMode()">Route einzeichnen</button>
-</main>
 
 <footer>
     Made with ❤️ by RiskySlopes
