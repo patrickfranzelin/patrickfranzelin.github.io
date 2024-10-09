@@ -1,29 +1,38 @@
-// script.js
+const map = L.map('map').setView([46.6, 11.7], 10);
 
-// Set your Cesium Ion Access Token
-Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70';
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
-// Initialize the Cesium Viewer in the `cesiumContainer` element with world terrain
-const viewer = new Cesium.Viewer("cesiumContainer", {
-  imageryProvider: new Cesium.IonImageryProvider({ assetId: 3954 }), // Satellite imagery
-  baseLayerPicker: false // Hide base layer picker
+function showRiskAreas() {
+    const level = document.getElementById("avalanche-level").value;
+    const wind = document.getElementById("wind-direction").value;
+    alert(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
+    L.circle([46.6, 11.7], { radius: level * 1000, color: 'red' }).addTo(map);
+}
+
+document.getElementById("file-input").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = JSON.parse(e.target.result);
+            L.geoJSON(data).addTo(map);
+        };
+        reader.readAsText(file);
+    }
 });
 
-// Set custom terrain to South Tyrol terrain using your Ion Asset ID
-viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-  url: Cesium.IonResource.fromAssetId(2765075) // Replace with your South Tyrol terrain Asset ID
-});
+let isDrawing = false;
+function toggleDrawMode() {
+    if (isDrawing) {
+        map.off("click", addMarker);
+    } else {
+        map.on("click", addMarker);
+    }
+    isDrawing = !isDrawing;
+}
 
-// Fly the camera to South Tyrol
-viewer.camera.flyTo({
-  destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 4000), // Coordinates for South Tyrol
-  orientation: {
-    heading: Cesium.Math.toRadians(0.0),
-    pitch: Cesium.Math.toRadians(-30.0)
-  }
-});
-
-// Add Cesium OSM Buildings layer
-Cesium.createOsmBuildingsAsync().then((buildingTileset) => {
-  viewer.scene.primitives.add(buildingTileset);
-});
+function addMarker(e) {
+    L.marker(e.latlng).addTo(map);
+}
