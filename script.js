@@ -47,18 +47,24 @@
 
     <script>
         // Cesium Ion Token einrichten
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZTUyYWNmYy0wYmMxLTQzZjItYWYwNC01YzJkZDMwMDk1ZTciLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg0ODA1MDh9.NR2eMLQ5vscVQBOTsjYkhnaPikwPAmVPLCgMwQLadY4';
+        Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ION_ACCESS_TOKEN';
 
         // Cesium Viewer initialisieren
         const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain(), // Geländedaten von Cesium Ion
+            terrainProvider: Cesium.createWorldTerrain(),
             imageryProvider: Cesium.createOpenStreetMapImageryProvider({
-                url: 'https://a.tile.openstreetmap.org/' // OpenStreetMap-Basis-Karte
+                url: 'https://a.tile.openstreetmap.org/' 
             }),
             baseLayerPicker: false,
             timeline: false,
             animation: false
         });
+
+        // DGM als 3D-Terrain hinzufügen
+        const terrainTileset = new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(YOUR_DGM_ASSET_ID) 
+        });
+        viewer.scene.primitives.add(terrainTileset);
 
         // Funktion zum Anzeigen der Gefahrenbereiche basierend auf Lawinenstufe und Windrichtung
         function showRiskAreas() {
