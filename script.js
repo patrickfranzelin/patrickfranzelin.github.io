@@ -18,7 +18,7 @@
 <body>
     <div id="cesiumContainer"></div>
     
-    <!-- Steuerungselemente -->
+    <!-- Control Elements -->
     <div>
         <label for="avalanche-level">Lawinenstufe:</label>
         <select id="avalanche-level">
@@ -41,45 +41,42 @@
             <option value="NW">NW</option>
         </select>
         <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
-        <input type="file" id="file-input" accept=".geojson">
-        <button onclick="toggleDrawMode()">Route einzeichnen</button>
     </div>
 
     <script>
-        // Cesium Ion Token einrichten
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZTUyYWNmYy0wYmMxLTQzZjItYWYwNC01YzJkZDMwMDk1ZTciLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg0ODA1MDh9.NR2eMLQ5vscVQBOTsjYkhnaPikwPAmVPLCgMwQLadY4';
+        // Set Cesium Ion access token
+        Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ION_ACCESS_TOKEN';
 
-        // Cesium Viewer initialisieren
+        // Initialize the Cesium Viewer with default settings
         const viewer = new Cesium.Viewer('cesiumContainer', {
             terrainProvider: Cesium.createWorldTerrain(),
             imageryProvider: Cesium.createOpenStreetMapImageryProvider({
-                url: 'https://a.tile.openstreetmap.org/' 
+                url: 'https://a.tile.openstreetmap.org/'
             }),
             baseLayerPicker: false,
             timeline: false,
             animation: false
         });
 
-        // DGM als 3D-Terrain hinzufügen
-        const terrainTileset = new Cesium.Cesium3DTileset({
-            url: Cesium.IonResource.fromAssetId(2764800) // Asset-ID für das DGM (PasseiertalDGM_10m)
+        // Load your DGM terrain from Cesium Ion
+        viewer.terrainProvider = Cesium.createWorldTerrain({
+            url: Cesium.IonResource.fromAssetId(2764800)
         });
-        viewer.scene.primitives.add(terrainTileset);
 
-        // Gefahrenbereiche als Bild-Overlay hinzufügen
-        viewer.imageryLayers.addImageryProvider(new Cesium.IonImageryProvider({
-            assetId: 2764816 // Asset-ID für die Gefahrenbereiche (pra_mask__)
-        }));
+        // Load the hazard map imagery layer
+        viewer.imageryLayers.addImageryProvider(
+            new Cesium.IonImageryProvider({ assetId: 2764816 })
+        );
 
-        // Funktion zum Anzeigen der Gefahrenbereiche basierend auf Lawinenstufe und Windrichtung
+        // Function to show risk areas based on avalanche level and wind direction
         function showRiskAreas() {
             const level = document.getElementById("avalanche-level").value;
             const wind = document.getElementById("wind-direction").value;
             console.log(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
             
-            // Beispiel-Gefahrenbereich anzeigen (Position und Radius basierend auf Lawinenstufe)
-            const center = Cesium.Cartesian3.fromDegrees(11.7, 46.6); // Zentrum der Gefahrenzone
-            const radius = level * 1000; // Radius basierend auf der Lawinenstufe
+            // Example of displaying a risk area (position and radius based on avalanche level)
+            const center = Cesium.Cartesian3.fromDegrees(11.7, 46.6); // Center of the hazard zone
+            const radius = level * 1000; // Radius based on avalanche level
 
             viewer.entities.add({
                 position: center,
@@ -91,50 +88,6 @@
                     outlineColor: Cesium.Color.RED
                 }
             });
-        }
-
-        // Funktion zum Hochladen einer GeoJSON-Datei und Anzeige auf der Karte
-        document.getElementById("file-input").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        const dataSource = new Cesium.GeoJsonDataSource();
-                        dataSource.load(data).then(() => {
-                            viewer.dataSources.add(dataSource);
-                            console.log("GeoJSON-Daten erfolgreich geladen.");
-                        });
-                    } catch (error) {
-                        console.error("Fehler beim Parsen der Datei:", error);
-                    }
-                };
-                reader.readAsText(file);
-            }
-        });
-
-        // Modus zum Zeichnen von Routen ein- und ausschalten
-        let isDrawing = false;
-        function toggleDrawMode() {
-            if (isDrawing) {
-                viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
-                console.log("Zeichenmodus deaktiviert.");
-            } else {
-                viewer.screenSpaceEventHandler.setInputAction(function(event) {
-                    const cartesian = viewer.camera.pickEllipsoid(event.position);
-                    if (cartesian) {
-                        const cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian);
-                        viewer.entities.add({
-                            position: Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude),
-                            point: { pixelSize: 10, color: Cesium.Color.BLUE }
-                        });
-                        console.log("Marker hinzugefügt bei:", cartographic);
-                    }
-                }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-                console.log("Zeichenmodus aktiviert.");
-            }
-            isDrawing = !isDrawing;
         }
     </script>
 </body>
