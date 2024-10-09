@@ -1,12 +1,22 @@
 // Set your Cesium Ion Access Token
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70';
 
-// Initialize the Cesium Viewer
-const viewer = new Cesium.Viewer('cesiumContainer', {
+// Initialize the Cesium Viewer in the HTML element with `cesiumContainer` and set OpenStreetMap as base imagery
+const viewer = new Cesium.Viewer("cesiumContainer", {
   imageryProvider: Cesium.createOpenStreetMapImageryProvider({
     url: 'https://a.tile.openstreetmap.org/'
   }),
-  baseLayerPicker: false // Hide base layer picker if not needed
+  baseLayerPicker: false // Hide base layer picker
+});
+
+// Add custom terrain for South Tyrol
+viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
+  url: Cesium.IonResource.fromAssetId(2765075) // Replace with your DTM asset ID
+});
+
+// Add "Gefahrenbereiche" layer
+Cesium.IonImageryProvider.fromAssetId(2764816).then((imageryProvider) => {
+  viewer.imageryLayers.addImageryProvider(imageryProvider);
 });
 
 // Function to show risk areas
@@ -63,3 +73,12 @@ function toggleDrawMode() {
   }
   isDrawing = !isDrawing;
 }
+
+// Fly the camera to South Tyrol
+viewer.camera.flyTo({
+  destination: Cesium.Cartesian3.fromDegrees(11.7, 46.6, 4000),
+  orientation: {
+    heading: Cesium.Math.toRadians(0.0),
+    pitch: Cesium.Math.toRadians(-30.0)
+  }
+});
