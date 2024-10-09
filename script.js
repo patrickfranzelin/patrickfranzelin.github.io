@@ -62,9 +62,14 @@
 
         // DGM als 3D-Terrain hinzufügen
         const terrainTileset = new Cesium.Cesium3DTileset({
-            url: Cesium.IonResource.fromAssetId(2764800) 
+            url: Cesium.IonResource.fromAssetId(2764800) // Asset-ID für das DGM (PasseiertalDGM_10m)
         });
         viewer.scene.primitives.add(terrainTileset);
+
+        // Gefahrenbereiche als Bild-Overlay hinzufügen
+        viewer.imageryLayers.addImageryProvider(new Cesium.IonImageryProvider({
+            assetId: 2764816 // Asset-ID für die Gefahrenbereiche (pra_mask__)
+        }));
 
         // Funktion zum Anzeigen der Gefahrenbereiche basierend auf Lawinenstufe und Windrichtung
         function showRiskAreas() {
