@@ -1,18 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskySlopes Map</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
 <body>
+
 <div id="sidebar">
-    <div class="logo">RiskySlopes</div>
-    <div class="sidebar-nav">
-        <button onclick="toggleDrawMode()">📍</button>
-        <button onclick="showRiskAreas()">⚠️</button>
-        <button>🗺️</button>
-        <button>🌡️</button>
-        <button>📂</button>
+    <h2>Touren Info</h2>
+    <div class="info-section">
+        <label>Datum:</label>
+        <input type="date" id="tour-date">
+    </div>
+    <div class="info-section">
+        <label>Startzeit:</label>
+        <input type="time" id="tour-start-time">
+    </div>
+    <div class="info-section">
+        <label>Dauer:</label>
+        <p>02:34 h</p>
+    </div>
+    <div class="info-section">
+        <label>Distanz:</label>
+        <p>3.30 km</p>
+    </div>
+    <div class="info-section">
+        <label>Höhenmeter:</label>
+        <p>776 m</p>
+    </div>
+    <div class="info-section">
+        <label>Art:</label>
+        <p>Ski</p>
     </div>
 </div>
 
-<main>
-    <div id="map" style="height: 80vh;"></div>
+<header>
+    <div class="logo">RiskySlopes</div>
+    <nav class="nav-links">
+        <a href="#map">Map</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
 
+<main>
     <div id="controls">
         <label for="avalanche-level">Lawinenstufe:</label>
         <select id="avalanche-level">
@@ -35,8 +69,18 @@
         </select>
         <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
     </div>
+    
+    <div id="map"></div>
+
+    <input type="file" id="file-input" accept=".gpx, .geojson">
+    <button onclick="toggleDrawMode()">Route einzeichnen</button>
 </main>
 
 <footer>
     Made with ❤️ by RiskySlopes
 </footer>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
