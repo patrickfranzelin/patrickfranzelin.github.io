@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RiskySlopes Map</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-</head>
 <body>
-
-<header>
+<div id="sidebar">
     <div class="logo">RiskySlopes</div>
-    <nav class="nav-links">
-        <a href="#map">Map</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-    </nav>
-</header>
+    <div class="sidebar-nav">
+        <button onclick="toggleDrawMode()">📍</button>
+        <button onclick="showRiskAreas()">⚠️</button>
+        <button>🗺️</button>
+        <button>🌡️</button>
+        <button>📂</button>
+    </div>
+</div>
 
 <main>
+    <div id="map" style="height: 80vh;"></div>
+
     <div id="controls">
         <label for="avalanche-level">Lawinenstufe:</label>
         <select id="avalanche-level">
@@ -41,18 +35,8 @@
         </select>
         <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
     </div>
-    
-    <div id="map" style="height: 70vh; width: 90%; margin: 40px auto; border-radius: 8px;"></div>
-
-    <input type="file" id="file-input" accept=".gpx, .geojson">
-    <button onclick="toggleDrawMode()">Route einzeichnen</button>
 </main>
 
 <footer>
     Made with ❤️ by RiskySlopes
 </footer>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="script.js"></script>
-</body>
-</html>
