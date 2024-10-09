@@ -28,3 +28,8 @@ viewer.camera.flyTo({
     pitch: Cesium.Math.toRadians(-30.0)
   }
 });
+
+// Optional: Add Cesium OSM Buildings layer
+Cesium.createOsmBuildingsAsync().then((buildingTileset) => {
+  viewer.scene.primitives.add(buildingTileset);
+});
