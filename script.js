@@ -1,50 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cesium South Tyrol Viewer</title>
-  <script src="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Cesium.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-  <style>
-      #cesiumContainer {
-          width: 100%;
-          height: 100vh;
-          margin: 0;
-          padding: 0;
-      }
-  </style>
-</head>
-<body>
-  <div id="cesiumContainer"></div>
-  <script>
-    // Set your Cesium Ion Access Token
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70';
+// Initialize the Leaflet map
+const map = L.map('map').setView([46.6, 11.7], 10); // Center on a default location
 
-    // Initialize the Cesium Viewer in the `cesiumContainer` element with world terrain
-    const viewer = new Cesium.Viewer("cesiumContainer", {
-      imageryProvider: new Cesium.IonImageryProvider({ assetId: 3954 }), // Satellite imagery
-      baseLayerPicker: false // Hide base layer picker
-    });
+// Add a tile layer (OpenStreetMap as a base layer)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-    // Set custom terrain to South Tyrol terrain using your Ion Asset ID
-    viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: Cesium.IonResource.fromAssetId(2765075) // Replace with your South Tyrol terrain Asset ID
-    });
+// Example function for showing risk areas
+function showRiskAreas() {
+    const level = document.getElementById("avalanche-level").value;
+    const wind = document.getElementById("wind-direction").value;
+    console.log(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
+    // Add circle or other markers on map as an example
+    L.circle([46.6, 11.7], { radius: level * 1000, color: 'red' }).addTo(map);
+}
 
-    // Fly the camera to South Tyrol
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 4000), // Coordinates for South Tyrol
-      orientation: {
-        heading: Cesium.Math.toRadians(0.0),
-        pitch: Cesium.Math.toRadians(-30.0)
-      }
-    });
+// Toggle drawing mode for adding markers on click
+let isDrawing = false;
+function toggleDrawMode() {
+    if (isDrawing) {
+        map.off("click", addMarker);
+        console.log("Draw mode deactivated.");
+    } else {
+        map.on("click", addMarker);
+        console.log("Draw mode activated.");
+    }
+    isDrawing = !isDrawing;
+}
 
-    // Add Cesium OSM Buildings layer
-    Cesium.createOsmBuildingsAsync().then((buildingTileset) => {
-      viewer.scene.primitives.add(buildingTileset);
-    });
-  </script>
-</body>
-</html>
+// Function to add markers
+function addMarker(e) {
+    L.marker(e.latlng).addTo(map);
+    console.log("Marker added at:", e.latlng);
+}
