@@ -1,4 +1,4 @@
-/* Allgemeine Stile */
+/* Grundlegende Stile */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,7 +10,54 @@ body {
     background-color: #FAFAFA;
     color: #333333;
     display: flex;
+    flex-direction: column;
     height: 100vh;
+}
+
+header {
+    width: 100%;
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo .logo-img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+header .logo span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4A90E2;
+}
+
+header .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+header .nav-links a {
+    font-size: 16px;
+    font-weight: 500;
+    color: #4A90E2;
+    text-decoration: none;
+}
+
+header .nav-links a:hover {
+    color: #357ABD;
 }
 
 /* Sidebar */
@@ -52,53 +99,16 @@ body {
     border: 1px solid #E0E0E0;
 }
 
-/* Header */
-header {
-    background-color: #FFFFFF;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    z-index: 10;
-    position: sticky;
-    top: 0;
-}
-
-header .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4A90E2;
-}
-
-header .nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-header .nav-links a {
-    font-size: 16px;
-    font-weight: 500;
-    color: #4A90E2;
-    text-decoration: none;
-}
-
-header .nav-links a:hover {
-    color: #357ABD;
-}
-
 /* Hauptinhalt (Kartenbereich und Steuerelemente) */
-#map {
-    width: calc(100% - 300px); /* Sidebar-Breite berücksichtigen */
-    height: calc(100vh - 60px);
+main {
+    display: flex;
+    width: calc(100% - 280px); /* Sidebar-Breite berücksichtigen */
     margin-left: auto;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    flex-direction: column;
 }
 
 #controls {
-    padding: 20px;
+    padding: 15px;
     display: flex;
     gap: 15px;
     align-items: center;
@@ -107,6 +117,14 @@ header .nav-links a:hover {
     border-radius: 8px;
     margin: 20px auto;
     width: 90%;
+}
+
+#map {
+    width: 90%;
+    height: 70vh;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Buttons und Steuerelemente */
@@ -125,20 +143,6 @@ button, select, input[type="file"] {
 button:hover, select:hover, input[type="file"]:hover {
     background-color: #357ABD;
     transform: scale(1.02);
-}
-
-/* Stil für Dropdowns */
-select {
-    background-color: #F5F5F5;
-    color: #333;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #E0E0E0;
-    cursor: pointer;
-}
-
-select:hover {
-    border: 1px solid #4A90E2;
 }
 
 /* Stil für Footer */
