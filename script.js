@@ -47,7 +47,7 @@
 
     <script>
         // Cesium Ion Token einrichten
-        Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ION_ACCESS_TOKEN';
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZTUyYWNmYy0wYmMxLTQzZjItYWYwNC01YzJkZDMwMDk1ZTciLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg0ODA1MDh9.NR2eMLQ5vscVQBOTsjYkhnaPikwPAmVPLCgMwQLadY4';
 
         // Cesium Viewer initialisieren
         const viewer = new Cesium.Viewer('cesiumContainer', {
