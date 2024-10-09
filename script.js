@@ -19,7 +19,7 @@
   <div id="cesiumContainer"></div>
   <script>
     // Set your Cesium Ion Access Token
-    Cesium.Ion.defaultAccessToken = 'YOUR_CESIUM_ACCESS_TOKEN';
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70';
 
     // Initialize the Cesium Viewer in the `cesiumContainer` element with world terrain
     const viewer = new Cesium.Viewer("cesiumContainer", {
