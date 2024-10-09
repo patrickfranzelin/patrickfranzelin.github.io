@@ -22,7 +22,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px;
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 10;
 }
@@ -58,6 +58,14 @@ header .nav-links a {
 
 header .nav-links a:hover {
     color: #357ABD;
+}
+
+/* Layout für den Hauptinhalt */
+#content {
+    display: flex;
+    margin-top: 80px; /* Platz für die feste Kopfzeile */
+    height: calc(100vh - 80px);
+    width: 100%;
 }
 
 /* Sidebar */
@@ -102,9 +110,9 @@ header .nav-links a:hover {
 /* Hauptinhalt (Kartenbereich und Steuerelemente) */
 main {
     display: flex;
-    width: calc(100% - 280px); /* Sidebar-Breite berücksichtigen */
-    margin-left: auto;
     flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
 }
 
 #controls {
@@ -115,7 +123,7 @@ main {
     background-color: #FFFFFF;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    margin: 20px auto;
+    margin-top: 20px;
     width: 90%;
 }
 
