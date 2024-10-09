@@ -1,35 +1,65 @@
-Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70';
+// Initialize Leaflet Map
+const leafletMap = L.map('map').setView([46.6, 11.7], 10);
 
-// Initialize the Cesium Viewer with no initial imagery provider
-const viewer = new Cesium.Viewer("cesiumContainer", {
-  imageryProvider: false, // Start with no imagery provider
-  baseLayerPicker: false // Hide base layer picker
-});
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(leafletMap);
 
-// Load your custom imagery layer from Cesium Ion (Asset ID: 3954)
-async function loadCustomImagery() {
-  const layer = await Cesium.IonImageryProvider.fromAssetId(3954);
-  viewer.imageryLayers.addImageryProvider(layer);
+function showRiskAreas() {
+    const level = document.getElementById("avalanche-level").value;
+    const wind = document.getElementById("wind-direction").value;
+    alert(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
+    L.circle([46.6, 11.7], { radius: level * 1000, color: 'red' }).addTo(leafletMap);
 }
 
-// Call the function to load the custom imagery
-loadCustomImagery();
+document.getElementById("file-input").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = JSON.parse(e.target.result);
+            L.geoJSON(data).addTo(leafletMap);
+        };
+        reader.readAsText(file);
+    }
+});
 
-// Set custom terrain to South Tyrol terrain using your Ion Asset ID
+let isDrawing = false;
+function toggleDrawMode() {
+    if (isDrawing) {
+        leafletMap.off("click", addMarker);
+    } else {
+        leafletMap.on("click", addMarker);
+    }
+    isDrawing = !isDrawing;
+}
+
+function addMarker(e) {
+    L.marker(e.latlng).addTo(leafletMap);
+}
+
+// Initialize Cesium Viewer
+Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70';
+const viewer = new Cesium.Viewer("cesiumContainer", {
+    imageryProvider: new Cesium.IonImageryProvider({ assetId: 3954 }), // Satellite imagery
+    baseLayerPicker: false
+});
+
+// Add custom terrain to Cesium
 viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
-  url: Cesium.IonResource.fromAssetId(2765075) // Replace with your DTM asset ID
+    url: Cesium.IonResource.fromAssetId(2765075)
 });
 
 // Fly the camera to South Tyrol
 viewer.camera.flyTo({
-  destination: Cesium.Cartesian3.fromDegrees(11.7, 46.6, 4000), // Coordinates for South Tyrol
-  orientation: {
-    heading: Cesium.Math.toRadians(0.0),
-    pitch: Cesium.Math.toRadians(-30.0)
-  }
+    destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 4000),
+    orientation: {
+        heading: Cesium.Math.toRadians(0.0),
+        pitch: Cesium.Math.toRadians(-30.0)
+    }
 });
 
-// Optional: Add Cesium OSM Buildings layer
+// Optional: Add Cesium OSM Buildings
 Cesium.createOsmBuildingsAsync().then((buildingTileset) => {
-  viewer.scene.primitives.add(buildingTileset);
+    viewer.scene.primitives.add(buildingTileset);
 });
