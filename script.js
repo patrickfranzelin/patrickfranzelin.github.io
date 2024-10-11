@@ -8,17 +8,6 @@ async function initializeViewer() {
     baseLayerPicker: false,
   });
 
-  // Load custom imagery layer
-  try {
-    const imageryLayer = await Cesium.IonImageryProvider.fromAssetId(2764816);
-    const layer = viewer.imageryLayers.addImageryProvider(imageryLayer);
-    viewer.zoomTo(layer);
-
-    // Remove loading overlay once the layer has loaded
-    document.getElementById("loadingOverlay").style.display = "none";
-  } catch (error) {
-    console.error("Error loading imagery layer:", error);
-  }
 }
 
 // Call the function to initialize the Cesium viewer
