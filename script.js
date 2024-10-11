@@ -10,21 +10,16 @@ async function initializeViewer() {
   // Load terrain
   const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
   viewer.terrainProvider = terrainProvider;
-  const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
-  viewer.terrainProvider = terrainProvider;
-
-// Apply a light transparent red overlay to the terrain
-  viewer.scene.globe.material = new Cesium.Material({
-      fabric: {
-          type: 'Color',
-          uniforms: {
-              color: new Cesium.Color(1.0, 0.0, 0.0, 0.3) // Light transparent red
-          }
-      }
-  });
+  
+  // Load imagery layer 2764816 with red tint
+  const imageryLayer = await Cesium.IonImageryProvider.fromAssetId(2764816);
+  const layer = viewer.imageryLayers.addImageryProvider(imageryLayer);
+  layer.alpha = 0.3;  // Set transparency
+  layer.colorToAlpha = new Cesium.Color(1.0, 0.0, 0.0, 1.0); // Apply red tint to this layer only
+  
   // Add default imagery
-  const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
-  viewer.imageryLayers.addImageryProvider(imageryProvider);
+  const defaultImageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
+  viewer.imageryLayers.addImageryProvider(defaultImageryProvider);
 
   let drawing = false;
   let routePositions = [];
