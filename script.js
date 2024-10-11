@@ -3,42 +3,36 @@ Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 async function initializeViewer() {
   try {
-    // Initialize the Cesium Viewer with custom options
     const viewer = new Cesium.Viewer("cesiumContainer", {
       baseLayerPicker: false,
-      imageryProvider: false  // Disable default imagery provider
+      imageryProvider: false
     });
 
     // Load and set the custom terrain provider
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
     viewer.terrainProvider = terrainProvider;
 
-    // Load the custom imagery layer
+    // Load custom imagery layers
     const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
     viewer.imageryLayers.addImageryProvider(imageryProvider);
-
     const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(2764816);
     viewer.imageryLayers.addImageryProvider(imageryProvider2);
 
-    // Set the initial view to a specific area
+    // Initial view
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000),
-      orientation: {
-        heading: Cesium.Math.toRadians(0),
-        pitch: Cesium.Math.toRadians(-30)
-      }
+      orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-30) }
     });
 
-    // Route-drawing setup
+    // Route-drawing
     let routePositions = [];
     let routeEntity = null;
 
-    function addRoutePoint(click) {
+    viewer.screenSpaceEventHandler.setInputAction((click) => {
       const cartesian = viewer.scene.pickPosition(click.position);
       if (cartesian) {
         routePositions.push(cartesian);
 
-        // Update or create the polyline
         if (routeEntity) {
           routeEntity.polyline.positions = new Cesium.CallbackProperty(() => routePositions, false);
         } else {
@@ -51,10 +45,14 @@ async function initializeViewer() {
           });
         }
       }
-    }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
-    // Enable route drawing on map click
-    viewer.screenSpaceEventHandler.setInputAction(addRoutePoint, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    // Function for showing risk areas (stub function)
+    window.showRiskAreas = function() {
+      const level = document.getElementById("avalanche-level").value;
+      const wind = document.getElementById("wind-direction").value;
+      alert(`Gefahrenstufe: ${level}, Windrichtung: ${wind}`);
+    };
 
     // Clear the route
     window.clearRoute = function() {
@@ -65,7 +63,7 @@ async function initializeViewer() {
       }
     };
 
-    // Finish the route (disable further editing)
+    // Finish route drawing
     window.finishRoute = function() {
       viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
@@ -75,5 +73,6 @@ async function initializeViewer() {
   }
 }
 
-// Call the function to initialize the Cesium viewer
+// Initialize the Cesium viewer
 initializeViewer();
+
