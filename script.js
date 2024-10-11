@@ -17,63 +17,57 @@ async function initializeViewer() {
     const imageryProvider1 = await Cesium.IonImageryProvider.fromAssetId(3954);
     viewer.imageryLayers.addImageryProvider(imageryProvider1);
 
-    const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(2764816);
-    viewer.imageryLayers.addImageryProvider(imageryProvider2);
-
     // Set the initial view to a specific area
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000),
       orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-30) }
     });
 
-    // Load the KML file with clampToGround option
-    //const kmlAssetId = 2768693; // Replace with your actual KML asset ID
-    //const kmlResource = await Cesium.IonResource.fromAssetId(kmlAssetId);
-    //const kmlDataSource = await Cesium.KmlDataSource.load(kmlResource, {
-     // camera: viewer.scene.camera,
-     // canvas: viewer.scene.canvas,
-     // clampToGround: true
-  //  });
-  //  viewer.dataSources.add(kmlDataSource);
-   // viewer.zoomTo(kmlDataSource);
-   // console.log("KML file loaded successfully.");
-
-    // Define variables for route drawing and distance/elevation calculations
     let drawing = false;
     let routePositions = [];
     let polyline;
 
-    // Start drawing route
     window.startRouteDrawing = function () {
       drawing = true;
       routePositions = [];
       if (polyline) viewer.entities.remove(polyline);
 
-      viewer.screenSpaceEventHandler.setInputAction((click) => {
+      viewer.screenSpaceEventHandler.setInputAction(async (click) => {
         if (drawing) {
           const cartesian = viewer.scene.pickPosition(click.position);
           if (cartesian) {
-            routePositions.push(cartesian);
+            const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+            const terrainAdjustedPoint = await Cesium.sampleTerrainMostDetailed(terrainProvider, [cartographic]);
+            const terrainPosition = Cesium.Cartesian3.fromRadians(
+              terrainAdjustedPoint[0].longitude,
+              terrainAdjustedPoint[0].latitude,
+              terrainAdjustedPoint[0].height
+            );
+            routePositions.push(terrainPosition);
             updatePolyline();
           }
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
 
-    // Update polyline for route drawing
     function updatePolyline() {
       if (polyline) viewer.entities.remove(polyline);
-      polyline = viewer.entities.add({ polyline: { positions: routePositions, width: 5, material: Cesium.Color.BLUE } });
+      polyline = viewer.entities.add({
+        polyline: {
+          positions: routePositions,
+          width: 5,
+          material: Cesium.Color.BLUE,
+          clampToGround: true
+        }
+      });
     }
 
-    // Finish drawing route and calculate distance and elevation
     window.finishRoute = function () {
       drawing = false;
       viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
       calculateDistanceAndElevation();
     };
 
-    // Clear route
     window.clearRoute = function () {
       routePositions = [];
       if (polyline) viewer.entities.remove(polyline);
@@ -81,18 +75,15 @@ async function initializeViewer() {
       document.getElementById("elevation").textContent = "0 m";
     };
 
-    // Show risk areas based on selected avalanche level and wind direction
     window.showRiskAreas = function () {
       const level = document.getElementById("avalanche-level").value;
       const wind = document.getElementById("wind-direction").value;
       alert(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
-      // Additional logic for displaying risk areas on the map can go here
     };
 
-    // Mark danger intersections on the route
     window.markDangerIntersections = function () {
       routePositions.forEach(position => {
-        const danger = Math.random() > 0.5;  // Example for danger detection, replace with real logic
+        const danger = Math.random() > 0.5;  // Example danger detection
         if (danger) {
           viewer.entities.add({
             position: position,
@@ -102,7 +93,6 @@ async function initializeViewer() {
       });
     };
 
-    // Calculate total distance and elevation gain of the route
     function calculateDistanceAndElevation() {
       let totalDistance = 0;
       let totalElevationGain = 0;
@@ -118,9 +108,9 @@ async function initializeViewer() {
       document.getElementById("elevation").textContent = totalElevationGain.toFixed(0) + " m";
     }
   } catch (error) {
-    console.error("An error occurred while initializing the Cesium viewer or loading the KML file:", error);
+    console.error("An error occurred while initializing the Cesium viewer:", error);
   }
 }
 
-// Initialize the Cesium viewer
+// Call the function to initialize the Cesium viewer
 initializeViewer();
