@@ -14,10 +14,10 @@ async function initializeViewer() {
     viewer.terrainProvider = terrainProvider;
 
     // Load the custom imagery layer
-    const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(2764816);
+    const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
     viewer.imageryLayers.addImageryProvider(imageryProvider);
 
-    const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(3954);
+    const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(2764816);
     viewer.imageryLayers.addImageryProvider(imageryProvider2);
     // Set the initial view to a specific area
     viewer.camera.setView({
