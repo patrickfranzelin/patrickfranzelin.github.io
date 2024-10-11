@@ -27,16 +27,16 @@ async function initializeViewer() {
     });
 
     // Load the KML file with clampToGround option
-    const kmlAssetId = 2768693; // Replace with your actual KML asset ID
-    const kmlResource = await Cesium.IonResource.fromAssetId(kmlAssetId);
-    const kmlDataSource = await Cesium.KmlDataSource.load(kmlResource, {
-      camera: viewer.scene.camera,
-      canvas: viewer.scene.canvas,
-      clampToGround: true
-    });
-    viewer.dataSources.add(kmlDataSource);
-    viewer.zoomTo(kmlDataSource);
-    console.log("KML file loaded successfully.");
+    //const kmlAssetId = 2768693; // Replace with your actual KML asset ID
+    //const kmlResource = await Cesium.IonResource.fromAssetId(kmlAssetId);
+    //const kmlDataSource = await Cesium.KmlDataSource.load(kmlResource, {
+     // camera: viewer.scene.camera,
+     // canvas: viewer.scene.canvas,
+     // clampToGround: true
+  //  });
+  //  viewer.dataSources.add(kmlDataSource);
+   // viewer.zoomTo(kmlDataSource);
+   // console.log("KML file loaded successfully.");
 
     // Define variables for route drawing and distance/elevation calculations
     let drawing = false;
