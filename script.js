@@ -17,6 +17,8 @@ async function initializeViewer() {
     const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(2764816);
     viewer.imageryLayers.addImageryProvider(imageryProvider);
 
+    const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(3954);
+    viewer.imageryLayers.addImageryProvider(imageryProvider2);
     // Set the initial view to a specific area
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000),  // Adjust coordinates and altitude as needed
