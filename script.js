@@ -1,5 +1,4 @@
-// Grant CesiumJS access to your ion assets
-Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70";
+Cesium.Ion.defaultAccessToken = "YOUR_CESIUM_ION_ACCESS_TOKEN";
 
 async function initializeViewer() {
   const viewer = new Cesium.Viewer("cesiumContainer", {
@@ -10,23 +9,17 @@ async function initializeViewer() {
   // Load terrain
   const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
   viewer.terrainProvider = terrainProvider;
-  
-  // Load imagery layer 2764816 with red tint
-  const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(2764816);
-  viewer.imageryLayers.addImageryProvider(imageryProvider);
-  layer.alpha = 0.3;  // Set transparency
-  layer.colorToAlpha = new Cesium.Color(1.0, 0.0, 0.0, 1.0); // Apply red tint to this layer only
-  
+
   // Add default imagery
-  const defaultImageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
-  viewer.imageryLayers.addImageryProvider(defaultImageryProvider);
+  const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
+  viewer.imageryLayers.addImageryProvider(imageryProvider);
 
   let drawing = false;
   let routePositions = [];
   let polyline;
 
   // Start drawing route
-  function startRouteDrawing() {
+  window.startRouteDrawing = function () {
     drawing = true;
     routePositions = [];
     if (polyline) {
@@ -42,7 +35,7 @@ async function initializeViewer() {
         }
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-  }
+  };
 
   // Update polyline for route drawing
   function updatePolyline() {
@@ -60,29 +53,29 @@ async function initializeViewer() {
   }
 
   // Finish drawing route
-  function finishRoute() {
+  window.finishRoute = function () {
     drawing = false;
     viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     calculateDistanceAndElevation();
-  }
+  };
 
   // Clear route
-  function clearRoute() {
+  window.clearRoute = function () {
     routePositions = [];
     if (polyline) {
       viewer.entities.remove(polyline);
     }
     document.getElementById("distance").textContent = "0 km";
     document.getElementById("elevation").textContent = "0 m";
-  }
+  };
 
   // Show risk areas based on selected avalanche level and wind direction
-  function showRiskAreas() {
+  window.showRiskAreas = function () {
     const level = document.getElementById("avalanche-level").value;
     const wind = document.getElementById("wind-direction").value;
     alert(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
     // Add your logic to display risk areas on the map
-  }
+  };
 
   // Calculate total distance and elevation gain of the route
   function calculateDistanceAndElevation() {
@@ -105,13 +98,6 @@ async function initializeViewer() {
     document.getElementById("distance").textContent = (totalDistance / 1000).toFixed(2) + " km";
     document.getElementById("elevation").textContent = totalElevationGain.toFixed(0) + " m";
   }
-
-  // Expose functions to global scope
-  window.startRouteDrawing = startRouteDrawing;
-  window.finishRoute = finishRoute;
-  window.clearRoute = clearRoute;
-  window.showRiskAreas = showRiskAreas;
 }
 
-// Call the initialize function
 initializeViewer();
