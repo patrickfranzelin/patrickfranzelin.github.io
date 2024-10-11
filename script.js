@@ -5,7 +5,7 @@ async function initializeViewer() {
   try {
     // Initialize the Cesium Viewer with custom options
     const viewer = new Cesium.Viewer("cesiumContainer", {
-      baseLayerPicker: true,
+      baseLayerPicker: false,
       imageryProvider: false  // Disable default imagery provider
     });
 
