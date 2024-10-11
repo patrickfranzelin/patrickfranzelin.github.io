@@ -6,11 +6,13 @@
   <title>RiskySlopes Map</title>
   <link href="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <style>
-    /* Fullscreen Cesium Container */
-    #cesiumContainer {
-      width: calc(100% - 300px); /* Reserve space for sidebar */
-      height: 100vh;
-      margin-left: 300px;
+    /* Basic styling for the layout */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
     }
 
     /* Top toolbar */
@@ -19,46 +21,61 @@
       top: 0;
       left: 0;
       width: 100%;
-      background-color: white;
-      padding: 10px;
+      height: 60px;
+      background-color: #004085;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      color: white;
       z-index: 10;
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    /* Sidebar */
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .nav-links a {
+      color: white;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Sidebar for larger screens */
     #sidebar {
       width: 300px;
-      height: 100vh;
+      height: calc(100vh - 60px);
       position: fixed;
-      top: 50px;
+      top: 60px;
       left: 0;
       background-color: #f4f4f9;
       padding: 20px;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    /* Logo and title */
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-    .logo-img {
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-    }
-
-    /* Control styles */
+    /* Sidebar content */
     .info-section, .controls {
       margin-bottom: 15px;
     }
+
     label {
       font-weight: bold;
       color: #4A90E2;
     }
+
     select, input[type="file"], button {
       width: 100%;
       padding: 8px;
@@ -66,24 +83,92 @@
       border: 1px solid #ddd;
       border-radius: 5px;
     }
+
     button {
       background-color: #4A90E2;
       color: #fff;
       cursor: pointer;
       margin-top: 10px;
     }
+
     button:hover {
       background-color: #357ABD;
+    }
+
+    /* Fullscreen Cesium container, adjusting to account for sidebar width */
+    #cesiumContainer {
+      width: calc(100% - 300px);
+      height: 100vh;
+      margin-left: 300px;
+    }
+
+    /* Responsive styling for smaller screens */
+    @media (max-width: 768px) {
+      #sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        box-shadow: none;
+      }
+
+      #cesiumContainer {
+        width: 100%;
+        height: calc(100vh - 120px); /* Adjust height for toolbar and sidebar */
+        margin-left: 0;
+        margin-top: 120px;
+      }
+
+      #toolbar {
+        flex-direction: column;
+        height: auto;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    /* Small screen adjustments for mobile devices */
+    @media (max-width: 480px) {
+      .logo-img {
+        width: 30px;
+        height: 30px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 6px;
+      }
+
+      #cesiumContainer {
+        height: calc(100vh - 200px); /* Extra space for expanded sidebar */
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- Top toolbar with logo and title -->
+<!-- Top toolbar with logo, title, and navigation links -->
 <div id="toolbar">
   <div class="logo">
     <img src="path_to_logo_image.png" alt="RiskySlopes Logo" class="logo-img">
-    <span>RiskySlopes</span>
+    <span style="font-size: 24px; font-weight: bold;">RiskySlopes</span>
+  </div>
+  <div class="nav-links">
+    <a href="#theorie">Theorie</a>
+    <a href="#projekt">Über das Projekt</a>
+    <a href="#mich">Über mich</a>
   </div>
 </div>
 
@@ -121,6 +206,7 @@
       <option value="NW">NW</option>
     </select>
   </div>
+  <button onclick="startRouteDrawing()">Route Einzeichnen Beginnen</button>
   <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
   <button onclick="clearRoute()">Route Löschen</button>
   <button onclick="finishRoute()">Route Einzeichnen Beenden</button>
