@@ -3,19 +3,15 @@ Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 async function initializeViewer() {
   try {
-    // Initialize the Cesium Viewer without a terrainProvider for initial setup
+    // Initialize the Cesium Viewer with the default imagery and no custom imagery layer
     const viewer = new Cesium.Viewer("cesiumContainer", {
       baseLayerPicker: false,
-      imageryProvider: false,  // Disable default imagery
+      imageryProvider: Cesium.createWorldImagery(),  // Use Cesium default imagery
     });
 
     // Load and set the custom terrain provider
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2765075);
     viewer.terrainProvider = terrainProvider;
-
-    // Load the custom imagery layer
-    const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(2764816);
-    viewer.imageryLayers.addImageryProvider(imageryProvider);
 
     // Set the initial view to a specific area
     viewer.camera.setView({
