@@ -18,11 +18,7 @@ async function initializeViewer() {
     viewer.imageryLayers.addImageryProvider(imageryProvider1);
 
     const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(2764816);
-    const imageryLayer2 = viewer.imageryLayers.addImageryProvider(imageryProvider2);
-    
-    // Apply a red tint to the second imagery layer
-   // imageryLayer2.alpha = 1;  // Adjust transparency (0 is fully transparent, 1 is fully opaque)
-    //imageryLayer2.colorToAlpha = Cesium.Color.RED;  // Apply light red tint
+    viewer.imageryLayers.addImageryProvider(imageryProvider2);
 
     // Set the initial view to a specific area
     viewer.camera.setView({
