@@ -76,7 +76,7 @@
       color: #4A90E2;
     }
 
-    select, input[type="file"], button {
+    select, button {
       width: 100%;
       padding: 8px;
       margin-top: 5px;
@@ -175,14 +175,6 @@
 <!-- Sidebar with controls -->
 <div id="sidebar">
   <h2>Touren Info</h2>
-  <div class="info-section">
-    <label>Datum:</label>
-    <input type="date" id="tour-date">
-  </div>
-  <div class="info-section">
-    <label>Startzeit:</label>
-    <input type="time" id="tour-start-time">
-  </div>
   <div class="controls">
     <label>Lawinenstufe:</label>
     <select id="avalanche-level">
@@ -205,6 +197,14 @@
       <option value="W">W</option>
       <option value="NW">NW</option>
     </select>
+  </div>
+  <div class="info-section">
+    <label>Distanz:</label>
+    <p id="distance">0 km</p>
+  </div>
+  <div class="info-section">
+    <label>Höhenmeter:</label>
+    <p id="elevation">0 m</p>
   </div>
   <button onclick="startRouteDrawing()">Route Einzeichnen Beginnen</button>
   <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
