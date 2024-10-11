@@ -3,11 +3,15 @@ Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 const viewer = new Cesium.Viewer("cesiumContainer");
 
-try {
-  const imageryLayer = viewer.imageryLayers.addImageryProvider(
-    await Cesium.IonImageryProvider.fromAssetId(2764816),
-  );
-  await viewer.zoomTo(imageryLayer);
-} catch (error) {
-  console.log(error);
+async function loadImageryLayer() {
+  try {
+    const imageryLayer = await Cesium.IonImageryProvider.fromAssetId(2764816);
+    const layer = viewer.imageryLayers.addImageryProvider(imageryLayer);
+    viewer.zoomTo(layer);
+  } catch (error) {
+    console.error("Error loading imagery layer:", error);
+  }
 }
+
+// Call the function to load the custom imagery
+loadImageryLayer();
