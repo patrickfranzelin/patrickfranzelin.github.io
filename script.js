@@ -1,6 +1,7 @@
 // Grant CesiumJS access to your ion assets
 Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0ZjQ2MzU4Zi1kMWQ0LTQ0MTUtODU0OS0zZTI1NjhiN2FmZDMiLCJpZCI6MjQ2OTE4LCJpYXQiOjE3Mjg1MDk4NzN9.DbWm6ADaeMLM-K8qIISh9vi6QlU281OA30AQ6_mDs70";
 
+
 async function initializeViewer() {
   try {
     const viewer = new Cesium.Viewer("cesiumContainer", {
@@ -28,33 +29,32 @@ async function initializeViewer() {
     let routePositions = [];
     let routeEntity = null;
 
-    viewer.screenSpaceEventHandler.setInputAction((click) => {
-      const cartesian = viewer.scene.pickPosition(click.position);
-      if (cartesian) {
-        routePositions.push(cartesian);
-
-        if (routeEntity) {
-          routeEntity.polyline.positions = new Cesium.CallbackProperty(() => routePositions, false);
-        } else {
-          routeEntity = viewer.entities.add({
-            polyline: {
-              positions: new Cesium.CallbackProperty(() => routePositions, false),
-              width: 4,
-              material: Cesium.Color.RED,
-            },
-          });
+    window.startRouteDrawing = function() {
+      viewer.screenSpaceEventHandler.setInputAction((click) => {
+        const cartesian = viewer.scene.pickPosition(click.position);
+        if (cartesian) {
+          routePositions.push(cartesian);
+          if (routeEntity) {
+            routeEntity.polyline.positions = new Cesium.CallbackProperty(() => routePositions, false);
+          } else {
+            routeEntity = viewer.entities.add({
+              polyline: {
+                positions: new Cesium.CallbackProperty(() => routePositions, false),
+                width: 4,
+                material: Cesium.Color.RED,
+              },
+            });
+          }
         }
-      }
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    };
 
-    // Function for showing risk areas (stub function)
     window.showRiskAreas = function() {
       const level = document.getElementById("avalanche-level").value;
       const wind = document.getElementById("wind-direction").value;
       alert(`Gefahrenstufe: ${level}, Windrichtung: ${wind}`);
     };
 
-    // Clear the route
     window.clearRoute = function() {
       routePositions = [];
       if (routeEntity) {
@@ -63,7 +63,6 @@ async function initializeViewer() {
       }
     };
 
-    // Finish route drawing
     window.finishRoute = function() {
       viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
@@ -75,4 +74,3 @@ async function initializeViewer() {
 
 // Initialize the Cesium viewer
 initializeViewer();
-
