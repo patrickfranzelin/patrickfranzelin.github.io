@@ -12,8 +12,8 @@ async function initializeViewer() {
   viewer.terrainProvider = terrainProvider;
   
   // Load imagery layer 2764816 with red tint
-  const imageryLayer = await Cesium.IonImageryProvider.fromAssetId(2764816);
-  const layer = viewer.imageryLayers.addImageryProvider(imageryLayer);
+  const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(2764816);
+  viewer.imageryLayers.addImageryProvider(imageryProvider);
   layer.alpha = 0.3;  // Set transparency
   layer.colorToAlpha = new Cesium.Color(1.0, 0.0, 0.0, 1.0); // Apply red tint to this layer only
   
