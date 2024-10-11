@@ -3,18 +3,13 @@ Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 async function initializeViewer() {
   try {
-    // Initialize the Cesium Viewer in 2D mode with a base imagery layer
     const viewer = new Cesium.Viewer("cesiumContainer", {
-      sceneMode: Cesium.SceneMode.SCENE2D, // Set to 2D
+      terrainProvider: await Cesium.createWorldTerrain(),
       baseLayerPicker: false,
     });
-
-    // Load the imagery layer using the asset ID
-    const imageryLayer = await Cesium.IonImageryProvider.fromAssetId(2764816);
-    viewer.imageryLayers.addImageryProvider(imageryLayer);
     
-    // Hide the loading overlay
-    document.getElementById("loadingOverlay").style.display = "none";
+    // Additional viewer settings if necessary
+    viewer.scene.globe.depthTestAgainstTerrain = true;
   } catch (error) {
     console.error("Error initializing Cesium viewer:", error);
   }
