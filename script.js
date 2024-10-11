@@ -13,7 +13,7 @@ async function initializeViewer() {
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
     viewer.terrainProvider = terrainProvider;
 
-    // Load custom imagery layers
+    // Load the custom imagery layer
     const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(3954);
     viewer.imageryLayers.addImageryProvider(imageryProvider);
 
@@ -28,49 +28,51 @@ async function initializeViewer() {
         pitch: Cesium.Math.toRadians(-30)
       }
     });
-  } catch (error) {
-    console.error("An error occurred while initializing the Cesium viewer:", error);
-  }
-}
 
-// Route upload and draw mode functions
-function uploadRoute() {
-  const fileInput = document.getElementById("file-input");
-  fileInput.addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = JSON.parse(e.target.result);
-        const geojsonDataSource = new Cesium.GeoJsonDataSource();
-        geojsonDataSource.load(data).then(function(dataSource) {
-          viewer.dataSources.add(dataSource);
-          viewer.flyTo(dataSource);
-        });
-      };
-      reader.readAsText(file);
-    }
-  });
-}
+    // Route-drawing setup
+    let routePositions = [];
+    let routeEntity = null;
 
-let isDrawing = false;
-function toggleDrawMode() {
-  if (isDrawing) {
-    viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
-    console.log("Zeichenmodus deaktiviert");
-  } else {
-    viewer.screenSpaceEventHandler.setInputAction(function(event) {
-      const cartesian = viewer.camera.pickEllipsoid(event.position);
+    function addRoutePoint(click) {
+      const cartesian = viewer.scene.pickPosition(click.position);
       if (cartesian) {
-        viewer.entities.add({
-          position: cartesian,
-          point: { pixelSize: 10, color: Cesium.Color.RED }
-        });
+        routePositions.push(cartesian);
+
+        // Update or create the polyline
+        if (routeEntity) {
+          routeEntity.polyline.positions = new Cesium.CallbackProperty(() => routePositions, false);
+        } else {
+          routeEntity = viewer.entities.add({
+            polyline: {
+              positions: new Cesium.CallbackProperty(() => routePositions, false),
+              width: 4,
+              material: Cesium.Color.RED,
+            },
+          });
+        }
       }
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-    console.log("Zeichenmodus aktiviert");
+    }
+
+    // Enable route drawing on map click
+    viewer.screenSpaceEventHandler.setInputAction(addRoutePoint, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    // Clear the route
+    window.clearRoute = function() {
+      routePositions = [];
+      if (routeEntity) {
+        viewer.entities.remove(routeEntity);
+        routeEntity = null;
+      }
+    };
+
+    // Finish the route (disable further editing)
+    window.finishRoute = function() {
+      viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    };
+
+  } catch (error) {
+    console.error("An error occurred while initializing Cesium viewer:", error);
   }
-  isDrawing = !isDrawing;
 }
 
 // Call the function to initialize the Cesium viewer
