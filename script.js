@@ -20,7 +20,7 @@ async function initializeViewer() {
   let polyline;
 
   // Start drawing route
-  window.startRouteDrawing = function () {
+  function startRouteDrawing() {
     drawing = true;
     routePositions = [];
     if (polyline) {
@@ -36,7 +36,7 @@ async function initializeViewer() {
         }
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-  };
+  }
 
   // Update polyline for route drawing
   function updatePolyline() {
@@ -54,29 +54,29 @@ async function initializeViewer() {
   }
 
   // Finish drawing route
-  window.finishRoute = function () {
+  function finishRoute() {
     drawing = false;
     viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
     calculateDistanceAndElevation();
-  };
+  }
 
   // Clear route
-  window.clearRoute = function () {
+  function clearRoute() {
     routePositions = [];
     if (polyline) {
       viewer.entities.remove(polyline);
     }
     document.getElementById("distance").textContent = "0 km";
     document.getElementById("elevation").textContent = "0 m";
-  };
+  }
 
   // Show risk areas based on selected avalanche level and wind direction
-  window.showRiskAreas = function () {
+  function showRiskAreas() {
     const level = document.getElementById("avalanche-level").value;
     const wind = document.getElementById("wind-direction").value;
     alert(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
     // Add your logic to display risk areas on the map
-  };
+  }
 
   // Calculate total distance and elevation gain of the route
   function calculateDistanceAndElevation() {
@@ -99,7 +99,13 @@ async function initializeViewer() {
     document.getElementById("distance").textContent = (totalDistance / 1000).toFixed(2) + " km";
     document.getElementById("elevation").textContent = totalElevationGain.toFixed(0) + " m";
   }
+
+  // Expose functions to global scope
+  window.startRouteDrawing = startRouteDrawing;
+  window.finishRoute = finishRoute;
+  window.clearRoute = clearRoute;
+  window.showRiskAreas = showRiskAreas;
 }
 
+// Call the initialize function
 initializeViewer();
-
