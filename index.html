@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RiskySlopes Map</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Widgets/widgets.css" />
-    <script src="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Cesium.js"></script>
+    <!-- Link to Cesium CSS for widgets -->
+    <link href="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 </head>
 <body>
 
@@ -26,6 +25,7 @@
 <div id="content">
     <div id="sidebar">
         <h2>Touren Info</h2>
+        <!-- Sidebar content with tour information -->
         <div class="info-section">
             <label>Datum:</label>
             <input type="date" id="tour-date">
@@ -54,6 +54,7 @@
 
     <main>
         <div id="controls">
+            <!-- Control elements for avalanche levels and wind direction -->
             <label for="avalanche-level">Lawinenstufe:</label>
             <select id="avalanche-level">
                 <option value="1">1 - Gering</option>
@@ -76,14 +77,9 @@
             <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
         </div>
         
-        <!-- Leaflet Map Container -->
-        <div id="map" style="width: 100%; height: 50vh;"></div>
-
-        <!-- Cesium Map Container -->
+        <!-- Cesium map container -->
         <div id="cesiumContainer" style="width: 100%; height: 50vh;"></div>
 
-        <input type="file" id="file-input" accept=".gpx, .geojson">
-        <button onclick="toggleDrawMode()">Route einzeichnen</button>
     </main>
 </div>
 
@@ -91,7 +87,9 @@
     Made with ❤️ by RiskySlopes
 </footer>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Cesium library -->
+<script src="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Cesium.js"></script>
+<!-- Custom script -->
 <script src="script.js"></script>
 </body>
 </html>
