@@ -8,3 +8,11 @@ try {
 } catch (error) {
   console.log(error);
 }
+try {
+  const imageryLayer = viewer.imageryLayers.addImageryProvider(
+    await Cesium.IonImageryProvider.fromAssetId(2764816),
+  );
+  await viewer.zoomTo(imageryLayer);
+} catch (error) {
+  console.log(error);
+}
