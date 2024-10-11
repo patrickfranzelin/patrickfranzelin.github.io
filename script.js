@@ -9,7 +9,7 @@ async function initializeViewer() {
       imageryProvider: false  // Disable default imagery provider
     });
 
-   // Load and set the custom terrain provider
+    // Load and set the custom terrain provider
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
     viewer.terrainProvider = terrainProvider;
 
@@ -28,6 +28,17 @@ async function initializeViewer() {
         pitch: Cesium.Math.toRadians(-30)
       }
     });
+
+    // Load the KML file
+    const kmlAssetId = 2768693; // Replace with your actual KML asset ID
+    const kmlResource = await Cesium.IonResource.fromAssetId(kmlAssetId);
+    const kmlDataSource = await Cesium.KmlDataSource.load(kmlResource, {
+      camera: viewer.scene.camera,
+      canvas: viewer.scene.canvas,
+    });
+    viewer.dataSources.add(kmlDataSource);
+    viewer.zoomTo(kmlDataSource);
+    console.log("KML file loaded successfully.");
 
     // Define variables for route drawing and initialize the distance/elevation display
     let drawing = false;
