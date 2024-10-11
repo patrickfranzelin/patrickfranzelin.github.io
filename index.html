@@ -8,13 +8,14 @@
   <style>
     /* Fullscreen Cesium Container */
     #cesiumContainer {
-      width: 100%;
+      width: calc(100% - 300px); /* Reserve space for sidebar */
       height: 100vh;
+      margin-left: 300px;
     }
-    
-    /* Toolbar styles */
+
+    /* Top toolbar */
     #toolbar {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -27,6 +28,18 @@
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     }
 
+    /* Sidebar */
+    #sidebar {
+      width: 300px;
+      height: 100vh;
+      position: fixed;
+      top: 50px;
+      left: 0;
+      background-color: #f4f4f9;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
     /* Logo and title */
     .logo {
       display: flex;
@@ -37,40 +50,88 @@
       height: 30px;
       margin-right: 10px;
     }
-    .nav-links button {
-      font-size: 16px;
-      padding: 5px 10px;
-      margin: 0 5px;
-      border: none;
-      border-radius: 5px;
-      color: #FFFFFF;
-      background-color: #4A90E2;
-      cursor: pointer;
+
+    /* Control styles */
+    .info-section, .controls {
+      margin-bottom: 15px;
     }
-    .nav-links button:hover {
+    label {
+      font-weight: bold;
+      color: #4A90E2;
+    }
+    select, input[type="file"], button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4A90E2;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
       background-color: #357ABD;
     }
   </style>
 </head>
 <body>
-  <!-- Toolbar with logo and title -->
-  <div id="toolbar">
-    <div class="logo">
-      <img src="path_to_logo_image.png" alt="RiskySlopes Logo" class="logo-img">
-      <span>RiskySlopes</span>
-    </div>
-    <div class="nav-links">
-      <button onclick="clearRoute()">Clear Route</button>
-      <button onclick="finishRoute()">Finish Route</button>
-    </div>
+
+<!-- Top toolbar with logo and title -->
+<div id="toolbar">
+  <div class="logo">
+    <img src="path_to_logo_image.png" alt="RiskySlopes Logo" class="logo-img">
+    <span>RiskySlopes</span>
   </div>
+</div>
 
-  <!-- Cesium 3D map container -->
-  <div id="cesiumContainer"></div>
+<!-- Sidebar with controls -->
+<div id="sidebar">
+  <h2>Touren Info</h2>
+  <div class="info-section">
+    <label>Datum:</label>
+    <input type="date" id="tour-date">
+  </div>
+  <div class="info-section">
+    <label>Startzeit:</label>
+    <input type="time" id="tour-start-time">
+  </div>
+  <div class="controls">
+    <label>Lawinenstufe:</label>
+    <select id="avalanche-level">
+      <option value="1">1 - Gering</option>
+      <option value="2">2 - Mäßig</option>
+      <option value="3">3 - Erheblich</option>
+      <option value="4">4 - Groß</option>
+      <option value="5">5 - Sehr Groß</option>
+    </select>
+  </div>
+  <div class="controls">
+    <label>Windrichtung:</label>
+    <select id="wind-direction">
+      <option value="N">N</option>
+      <option value="NE">NE</option>
+      <option value="E">E</option>
+      <option value="SE">SE</option>
+      <option value="S">S</option>
+      <option value="SW">SW</option>
+      <option value="W">W</option>
+      <option value="NW">NW</option>
+    </select>
+  </div>
+  <button onclick="showRiskAreas()">Gefahrenbereiche anzeigen</button>
+  <button onclick="clearRoute()">Route Löschen</button>
+  <button onclick="finishRoute()">Route Einzeichnen Beenden</button>
+</div>
 
-  <!-- CesiumJS library -->
-  <script src="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Cesium.js"></script>
-  <!-- Custom JavaScript file -->
-  <script src="script.js"></script>
+<!-- Cesium 3D map container -->
+<div id="cesiumContainer"></div>
+
+<!-- CesiumJS library -->
+<script src="https://cdn.jsdelivr.net/npm/cesium@1.122.0/Build/Cesium/Cesium.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
