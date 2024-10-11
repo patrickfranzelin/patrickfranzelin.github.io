@@ -9,7 +9,7 @@ async function initializeViewer() {
       imageryProvider: false  // Disable default imagery provider
     });
 
-    // Load and set the custom terrain provider
+   // Load and set the custom terrain provider
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
     viewer.terrainProvider = terrainProvider;
 
@@ -17,12 +17,9 @@ async function initializeViewer() {
     const imageryProvider1 = await Cesium.IonImageryProvider.fromAssetId(3954);
     viewer.imageryLayers.addImageryProvider(imageryProvider1);
 
-    // Load the second custom imagery layer (overlay with red tint)
     const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(2764816);
-    const redLayer = viewer.imageryLayers.addImageryProvider(imageryProvider2);
-    // Apply a red, semi-transparent color to the overlay layer
-    redLayer.alpha = 0.2;  // Adjust transparency (0 = fully transparent, 1 = fully opaque)
-    redLayer.color = Cesium.Color.RED.withAlpha(0.7); // Set color to red with desired tra
+    viewer.imageryLayers.addImageryProvider(imageryProvider2);
+    
     // Set the initial view to a specific area
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000),  // Adjust coordinates and altitude as needed
