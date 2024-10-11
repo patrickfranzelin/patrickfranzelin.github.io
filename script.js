@@ -10,7 +10,7 @@ async function initializeViewer() {
     });
 
     // Load and set the custom terrain provider
-    const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2765075);
+    const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
     viewer.terrainProvider = terrainProvider;
 
     // Load the custom imagery layer
