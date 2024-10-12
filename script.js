@@ -122,17 +122,46 @@ async function initializeViewer() {
         viewer.imageryLayers.remove(activeRiskLayer);
       }
 
-      // Load the new imagery provider and add it to the viewer with color classification
+      // Load the new imagery provider and add it to the viewer with a color shader
       const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(fileId);
       activeRiskLayer = viewer.imageryLayers.addImageryProvider(imageryProvider);
 
       activeRiskLayer.alpha = 0.8;
-      activeRiskLayer.minimumTerrainLevel = 0;
-      activeRiskLayer.maximumTerrainLevel = 20;
 
-      // Set up color ramp from yellow to red
-      activeRiskLayer.colorToAlpha = new Cesium.Color(1.0, 1.0, 0.0, 0.5); // Yellow at lower bound
-      activeRiskLayer.colorToAlphaThreshold = 0.4;
+      // Apply custom color ramp through a color shader material
+      activeRiskLayer.material = new Cesium.Material({
+        fabric: {
+          type: 'ColorRamp',
+          uniforms: {
+            colors: [
+              new Cesium.Color(1.0, 1.0, 0.0, 1.0),  // Yellow for low values
+              new Cesium.Color(1.0, 0.5, 0.0, 1.0),  // Orange for medium-low values
+              new Cesium.Color(1.0, 0.0, 0.0, 1.0),  // Red for high values
+            ],
+          },
+          source: `
+            uniform sampler2D image;
+            czm_material czm_getMaterial(czm_materialInput materialInput) {
+                czm_material material = czm_getDefaultMaterial(materialInput);
+                vec2 st = materialInput.st;
+                vec4 color = texture2D(image, st);
+
+                // Apply a simple color ramp
+                float intensity = color.r; // Assume single-band grayscale
+                if (intensity < 0.4) {
+                    material.diffuse = vec3(1.0, 1.0, 0.0); // Yellow
+                } else if (intensity < 0.6) {
+                    material.diffuse = vec3(1.0, 0.5, 0.0); // Orange
+                } else {
+                    material.diffuse = vec3(1.0, 0.0, 0.0); // Red
+                }
+
+                material.alpha = color.a * 0.8;
+                return material;
+            }
+          `,
+        },
+      });
 
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000)
