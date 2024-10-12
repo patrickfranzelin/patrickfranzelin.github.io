@@ -106,7 +106,9 @@ async function initializeViewer() {
       }
     };
 
-    window.showRiskAreas = function () {
+    let activeRiskLayer;
+
+    window.showRiskAreas = async function () {
       const level = document.getElementById("avalanche-level").value;
       const wind = document.getElementById("wind-direction").value;
 
@@ -116,12 +118,17 @@ async function initializeViewer() {
         return;
       }
 
-      const imageryLayer = viewer.imageryLayers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: fileId }));
-      imageryLayer.alpha = 0.6;
-      imageryLayer.colorToAlpha = new Cesium.Color(1.0, 1.0, 1.0, 0.4);
-      imageryLayer.colorToAlphaThreshold = 0.4;
-      
-      viewer.imageryLayers.add(imageryLayer);
+      // Remove the current risk layer if it exists
+      if (activeRiskLayer) {
+        viewer.imageryLayers.remove(activeRiskLayer);
+      }
+
+      // Load the new imagery provider and add it to the viewer
+      const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(fileId);
+      activeRiskLayer = viewer.imageryLayers.addImageryProvider(imageryProvider);
+      activeRiskLayer.alpha = 0.6;
+      activeRiskLayer.colorToAlpha = new Cesium.Color(1.0, 1.0, 1.0, 0.4);
+      activeRiskLayer.colorToAlphaThreshold = 0.4;
 
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000)
