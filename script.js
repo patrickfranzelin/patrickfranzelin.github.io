@@ -24,6 +24,7 @@ async function initializeViewer() {
     let drawing = false;
     let routePositions = [];
     let polyline;
+    let activeRiskLayer;
 
     window.startRouteDrawing = function () {
       drawing = true;
@@ -106,8 +107,6 @@ async function initializeViewer() {
       }
     };
 
-    let activeRiskLayer;
-
     window.showRiskAreas = async function () {
       const level = document.getElementById("avalanche-level").value;
       const wind = document.getElementById("wind-direction").value;
@@ -123,11 +122,16 @@ async function initializeViewer() {
         viewer.imageryLayers.remove(activeRiskLayer);
       }
 
-      // Load the new imagery provider and add it to the viewer
+      // Load the new imagery provider and add it to the viewer with color classification
       const imageryProvider = await Cesium.IonImageryProvider.fromAssetId(fileId);
       activeRiskLayer = viewer.imageryLayers.addImageryProvider(imageryProvider);
-      activeRiskLayer.alpha = 0.6;
-      activeRiskLayer.colorToAlpha = new Cesium.Color(1.0, 1.0, 1.0, 0.4);
+
+      activeRiskLayer.alpha = 0.8;
+      activeRiskLayer.minimumTerrainLevel = 0;
+      activeRiskLayer.maximumTerrainLevel = 20;
+
+      // Set up color ramp from yellow to red
+      activeRiskLayer.colorToAlpha = new Cesium.Color(1.0, 1.0, 0.0, 0.5); // Yellow at lower bound
       activeRiskLayer.colorToAlphaThreshold = 0.4;
 
       viewer.camera.flyTo({
