@@ -3,24 +3,19 @@ Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 async function initializeViewer() {
   try {
-    // Initialize the Cesium Viewer with custom options
     const viewer = new Cesium.Viewer("cesiumContainer", {
       baseLayerPicker: false,
       imageryProvider: false
     });
-
-    // Load and set the custom terrain provider
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromIonAssetId(2764800);
     viewer.terrainProvider = terrainProvider;
 
-    // Load the custom imagery layers
     const imageryProvider1 = await Cesium.IonImageryProvider.fromAssetId(3954);
     viewer.imageryLayers.addImageryProvider(imageryProvider1);
 
     const imageryProvider2 = await Cesium.IonImageryProvider.fromAssetId(2764816);
     viewer.imageryLayers.addImageryProvider(imageryProvider2);
 
-    // Set the initial view to a specific area
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000),
       orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-30) }
@@ -78,15 +73,64 @@ async function initializeViewer() {
       document.getElementById("elevation").textContent = "0 m";
     };
 
+    const riskFileMapping = {
+      "1": {
+        "N": 2768822,
+        "NE": 2768823,
+        "E": 2768824,
+        "SE": 2768825,
+        "S": 2768826,
+        "SW": 2768827,
+        "W": 2768828,
+        "NW": 2768829
+      },
+      "2": {
+        "N": 2768823,
+        "NE": 2768831,
+        "E": 2768825,
+        "SE": 2768833,
+        "S": 2768834,
+        "SW": 2768835,
+        "W": 2768836,
+        "NW": 2768824,
+      },
+      "3": {
+        "N": 2768838,
+        "NE": 2768839,
+        "E": 2768825,
+        "SE": 2768841,
+        "S": 2768842,
+        "SW": 2768843,
+        "W": 2768844,
+        "NW": 2768845
+      }
+    };
+
     window.showRiskAreas = function () {
       const level = document.getElementById("avalanche-level").value;
       const wind = document.getElementById("wind-direction").value;
-      alert(`Lawinenstufe: ${level}, Windrichtung: ${wind}`);
+
+      const fileId = riskFileMapping[level][wind];
+      if (!fileId) {
+        alert("No data available for the selected level and direction.");
+        return;
+      }
+
+      const imageryLayer = viewer.imageryLayers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: fileId }));
+      imageryLayer.alpha = 0.6;
+      imageryLayer.colorToAlpha = new Cesium.Color(1.0, 1.0, 1.0, 0.4);
+      imageryLayer.colorToAlphaThreshold = 0.4;
+      
+      viewer.imageryLayers.add(imageryLayer);
+
+      viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(11.362, 46.498, 15000)
+      });
     };
 
     window.markDangerIntersections = function () {
       routePositions.forEach(position => {
-        const danger = Math.random() > 0.5;  // Example danger detection
+        const danger = Math.random() > 0.5;
         if (danger) {
           viewer.entities.add({
             position: position,
@@ -115,5 +159,4 @@ async function initializeViewer() {
   }
 }
 
-// Call the function to initialize the Cesium viewer
 initializeViewer();
